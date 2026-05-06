@@ -18,4 +18,8 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    
+    // Aligns Kotlin versions to avoid duplicate class errors between 
+    // kotlin-stdlib and older kotlin-stdlib-jdk7/jdk8
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
 }
