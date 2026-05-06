@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\MSI\\.gradle\\daemon\\8.9\\com.example.simplehabittracker.app-debug-25:\\layout_item_habit.xml.flat",
+        "source": "C:\\Users\\MSI\\.gradle\\daemon\\8.9\\com.example.simplehabittracker.app-main-27:\\layout\\item_habit.xml"
+    },
+    {
+        "merged": "com.example.simplehabittracker.app-debug-25:/layout_activity_main.xml.flat",
+        "source": "com.example.simplehabittracker.app-main-27:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\MSI\\.gradle\\daemon\\8.9\\com.example.simplehabittracker.app-debug-25:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\MSI\\.gradle\\daemon\\8.9\\com.example.simplehabittracker.app-main-27:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "com.example.simplehabittracker.app-debug-25:/layout_activity_register.xml.flat",
+        "source": "com.example.simplehabittracker.app-main-27:/layout/activity_register.xml"
+    },
+    {
+        "merged": "com.example.simplehabittracker.app-debug-25:/layout_activity_login.xml.flat",
+        "source": "com.example.simplehabittracker.app-main-27:/layout/activity_login.xml"
+    }
+]

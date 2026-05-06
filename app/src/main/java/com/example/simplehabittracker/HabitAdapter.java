@@ -1,5 +1,7 @@
 package com.example.simplehabittracker;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
     public interface OnHabitActionListener {
         void onHabitChecked(Habit habit, boolean isChecked);
+        void onHabitEdited(Habit habit);
         void onHabitDeleted(Habit habit);
     }
 
@@ -39,6 +42,11 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         Habit habit = habitList.get(position);
 
         holder.textViewTitle.setText(habit.getTitle());
+        holder.textViewDescription.setText(habit.getDescription());
+        holder.textViewCategory.setText(habit.getCategory());
+        holder.textViewCompletedCount.setText("Done: " + habit.getCompletedCount() + " times");
+        holder.textViewStreak.setText("Streak: " + habit.getStreak() + " days");
+        setCardBackground(holder.itemView, habit);
 
         // Clear old listener before setting checked state.
         holder.checkBoxDone.setOnCheckedChangeListener(null);
@@ -49,6 +57,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             listener.onHabitChecked(habit, isChecked);
         });
 
+        holder.buttonEdit.setOnClickListener(v -> listener.onHabitEdited(habit));
         holder.buttonDelete.setOnClickListener(v -> listener.onHabitDeleted(habit));
     }
 
@@ -64,14 +73,45 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
     static class HabitViewHolder extends RecyclerView.ViewHolder {
         TextView textViewTitle;
+        TextView textViewDescription;
+        TextView textViewCategory;
+        TextView textViewCompletedCount;
+        TextView textViewStreak;
         CheckBox checkBoxDone;
+        Button buttonEdit;
         Button buttonDelete;
 
         public HabitViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
+            textViewDescription = itemView.findViewById(R.id.textViewDescription);
+            textViewCategory = itemView.findViewById(R.id.textViewCategory);
+            textViewCompletedCount = itemView.findViewById(R.id.textViewCompletedCount);
+            textViewStreak = itemView.findViewById(R.id.textViewStreak);
             checkBoxDone = itemView.findViewById(R.id.checkBoxDone);
+            buttonEdit = itemView.findViewById(R.id.buttonEdit);
             buttonDelete = itemView.findViewById(R.id.buttonDelete);
         }
+    }
+
+    private void setCardBackground(View itemView, Habit habit) {
+        int color;
+
+        if (habit.isDone()) {
+            color = Color.rgb(221, 235, 222);
+        } else if ("Study".equals(habit.getCategory())) {
+            color = Color.rgb(211, 232, 255);
+        } else if ("Health".equals(habit.getCategory())) {
+            color = Color.rgb(213, 242, 218);
+        } else if ("Sport".equals(habit.getCategory())) {
+            color = Color.rgb(255, 229, 198);
+        } else {
+            color = Color.rgb(235, 235, 235);
+        }
+
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(color);
+        background.setCornerRadius(18);
+        itemView.setBackground(background);
     }
 }
