@@ -1,5 +1,7 @@
 # Simple Habit Tracker
 
+> **University project** — ISAMM, Computer Science. Built individually.
+
 Simple Habit Tracker is an Android application written in Java. It lets users create an account, log in, and manage daily habits with a local SQLite database. The app includes per-user habit tracking, completion streaks, category labels, and a daily reset feature.
 
 ## Features
@@ -95,6 +97,10 @@ The app uses a local SQLite database in `DatabaseHelper.java`.
 - The app package name is `com.example.simplehabittracker`.
 - Minimum SDK is `23` and target SDK is `35`.
 - The launcher activity is `LoginActivity`.
+
+## Known Limitations
+
+- Passwords are currently stored in plain text in the local SQLite database; hashing them is the next planned improvement.
 
 ## Future Improvements
 
