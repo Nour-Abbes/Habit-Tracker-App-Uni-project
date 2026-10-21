@@ -1,5 +1,17 @@
+# Gradle / Android build output
 .gradle/
 build/
+app/build/
+*.apk
+*.aab
+
+# Local machine config (SDK path)
 local.properties
-*.iml
+
+# IDE files
 .idea/
+*.iml
+
+# JVM crash logs
+hs_err_pid*.log
+replay_pid*.log
