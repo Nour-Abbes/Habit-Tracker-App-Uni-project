@@ -87,12 +87,8 @@ The app uses a SQLite database named `habits.db`. The `users` table stores user 
 
 `LoginActivity` uses a session in `user_session` to store the current user ID and username in `SharedPreferences`. It does not store the password in that session.
 
-## Password Storage
-
-Passwords are currently stored in plaintext in the local SQLite database and are compared directly during login. A secure future improvement would use a salted password-hashing algorithm such as PBKDF2, bcrypt, or Argon2 instead of storing or comparing raw passwords.
-
 ## Known Limitations
 
-- **Password security:** Passwords are stored in plaintext in SQLite; secure password hashing should be implemented before production use.
-- **Streak tracking:** Streak values are stored counters, not calendar-validated consecutive-day calculations.
-- **Weekly date selector:** The weekday control is visual only; selecting a day does not load habits for a separate date.
+- Passwords are currently stored in plaintext in SQLite. A future improvement is secure password hashing.
+- Streaks are based on completion counters rather than consecutive calendar days.
+- The weekly date selector is visual only and does not load historical habits.
