@@ -89,14 +89,10 @@ The app uses a SQLite database named `habits.db`. The `users` table stores user 
 
 ## Password Storage
 
-Registration currently passes the entered password directly to `DatabaseHelper.registerUser()`, and SQLite stores it as plaintext in the `users.password` column. Login passes the entered password back to `DatabaseHelper.checkUserLogin()` and compares the username and password using a SQL `WHERE` clause.
-
-For a future improvement, store a salted password hash using a work-factor-based algorithm such as PBKDF2, bcrypt, or Argon2. On registration, generate a unique random salt, derive and store the hash, and never store the raw password. On login, retrieve the user's salt and parameters, derive a hash from the entered password, and compare the two hashes in constant time. A secure migration should also rehash existing plaintext passwords on the next successful login or, preferably, require password reset and then replace plaintext values with hashes.
+Passwords are currently stored in plaintext in the local SQLite database and are compared directly during login. A secure future improvement would use a salted password-hashing algorithm such as PBKDF2, bcrypt, or Argon2 instead of storing or comparing raw passwords.
 
 ## Known Limitations
 
-- Passwords are currently stored in plain text in the local SQLite database.
-- Authentication is local to the app and is not backed by a server or remote account system.
-- The completion counter and streak value are stored fields; the implementation does not maintain dated streak history.
-- The streak counter is not a calendar-validated streak: checking an unchecked habit increments it, while unchecking or using **New Day** does not provide a complete consecutive-days calculation.
-- The weekly day control is a visual selector; selecting another day does not change or load a separate date's habits.
+- **Password security:** Passwords are stored in plaintext in SQLite; secure password hashing should be implemented before production use.
+- **Streak tracking:** Streak values are stored counters, not calendar-validated consecutive-day calculations.
+- **Weekly date selector:** The weekday control is visual only; selecting a day does not load habits for a separate date.
