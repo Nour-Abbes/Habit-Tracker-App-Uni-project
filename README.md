@@ -1,111 +1,102 @@
 # Simple Habit Tracker
 
-> **University project** — ISAMM, Computer Science. Built individually.
+> University project - ISAMM, Computer Science. Built individually.
 
-Simple Habit Tracker is an Android application written in Java. It lets users create an account, log in, and manage daily habits with a local SQLite database. The app includes per-user habit tracking, completion streaks, category labels, and a daily reset feature.
+A native Android habit tracker written in Java. The app stores user accounts and habits locally with SQLite and supports multiple accounts on the device.
 
-## Features
+## Key Features
 
-- User registration and login flow
-- Persistent login session using `SharedPreferences`
-- Add habits with title, description, and category
-- Mark habits as done or undone
-- Edit and delete habits
-- Daily reset via `New Day` button
-- Habit progress summary with completed count and streak
-- Habits separated into `To Do` and `Done` lists
-- Weekly day selector UI for context
+- Register and log in to a local account.
+- Keep a session after login using `SharedPreferences`.
+- Create habits with a title, description, and category.
+- Edit or delete habits.
+- Split habits into **To Do** and **Done** lists.
+- Track completion counts and an in-app streak counter.
+- Reset all of the current user's completed states with **New Day**.
+- View today's date and select a day in the in-app weekly UI.
 
-## Tech Stack
+## Technologies
 
-- Java
-- Android SDK
+- Java 11
+- Android SDK 35
+- AndroidX AppCompat
 - AndroidX RecyclerView
 - XML layouts
-- SQLite via `SQLiteOpenHelper`
+- SQLite with `SQLiteOpenHelper`
 - `SharedPreferences`
-- Gradle
-
-## Project Structure
-
-- `app/`
-  - `src/main/java/com/example/simplehabittracker/`
-    - `LoginActivity.java`
-    - `RegisterActivity.java`
-    - `MainActivity.java`
-    - `DatabaseHelper.java`
-    - `HabitAdapter.java`
-    - `Habit.java`
-  - `src/main/res/layout/`
-    - `activity_login.xml`
-    - `activity_register.xml`
-    - `activity_main.xml`
-    - `item_habit.xml`
-  - `src/main/AndroidManifest.xml`
-- `build.gradle`
-- `settings.gradle`
-- `gradle.properties`
-- `gradle/wrapper/`
-- `screenshots/`
+- Gradle 8.7.3
 
 ## Screenshots
 
-- `screenshots/login.png`
-- `screenshots/habit-list.png`
+![Login screen](screenshots/login.png)
+![Habit list screen](screenshots/habit-list.png)
 
-![Login](screenshots/login.png)
-![Habit List](screenshots/habit-list.png)
+## Project Structure
 
-## Database Schema
+```text
+app/src/main/
+├── java/com/example/simplehabittracker/
+│   ├── DatabaseHelper.java   # SQLite schema and data operations
+│   ├── Habit.java            # Habit model
+│   ├── HabitAdapter.java     # RecyclerView bindings and actions
+│   ├── LoginActivity.java    # Login and session handling
+│   ├── MainActivity.java     # Habit screen and interactions
+│   └── RegisterActivity.java # Account registration
+├── res/layout/
+│   ├── activity_login.xml
+│   ├── activity_register.xml
+│   ├── activity_main.xml
+│   └── item_habit.xml
+└── AndroidManifest.xml
+```
 
-The app uses a local SQLite database in `DatabaseHelper.java`.
+The application package is `com.example.simplehabittracker`. The minimum SDK is 23, and the target SDK is 35.
 
-- Database name: `habits.db`
-- Tables:
-  - `users`
-    - `id`
-    - `username`
-    - `password`
-  - `habits`
-    - `id`
-    - `user_id`
-    - `title`
-    - `description`
-    - `category`
-    - `is_done`
-    - `completed_count`
-    - `streak`
+## Setup
 
-## App Behavior
+### Requirements
 
-- `LoginActivity` verifies credentials and saves the current user session.
-- `RegisterActivity` adds new users to the database.
-- `MainActivity` shows habits for the logged-in user.
-- Habit items track completion count, streak, and category color styling.
-- `New Day` resets daily habit completion state for the current user.
+- Android Studio
+- Android SDK 35
+- An Android emulator or a device running Android 6.0 (API 23) or newer
 
-## How to Run
+### Run the app
 
-1. Open Android Studio.
-2. Select `Open an existing Android Studio project`.
-3. Choose the `Habit-Tracker-App-Uni-project` folder.
-4. Allow Gradle to sync and build.
-5. Run the `app` module on an emulator or connected Android device.
+1. Clone the repository:
 
-## Notes
+   ```bash
+   git clone https://github.com/Nour-Abbes/Habit-Tracker-App-Uni-project.git
+   cd Habit-Tracker-App-Uni-project
+   ```
 
-- The app package name is `com.example.simplehabittracker`.
-- Minimum SDK is `23` and target SDK is `35`.
-- The launcher activity is `LoginActivity`.
+2. Open the project folder in Android Studio.
+3. Let Gradle sync the project.
+4. Select the `app` configuration and run it on an emulator or connected device.
+
+To build a debug APK from the command line:
+
+```bash
+./gradlew assembleDebug
+```
+
+The resulting APK is written to `app/build/outputs/apk/debug/`.
+
+## Local Data
+
+The app uses a SQLite database named `habits.db`. The `users` table stores user ID, username, and password; the `habits` table stores habit fields, ownership, completion state, completion count, and streak value.
+
+`LoginActivity` uses a session in `user_session` to store the current user ID and username in `SharedPreferences`. It does not store the password in that session.
+
+## Password Storage
+
+Registration currently passes the entered password directly to `DatabaseHelper.registerUser()`, and SQLite stores it as plaintext in the `users.password` column. Login passes the entered password back to `DatabaseHelper.checkUserLogin()` and compares the username and password using a SQL `WHERE` clause.
+
+For a future improvement, store a salted password hash using a work-factor-based algorithm such as PBKDF2, bcrypt, or Argon2. On registration, generate a unique random salt, derive and store the hash, and never store the raw password. On login, retrieve the user's salt and parameters, derive a hash from the entered password, and compare the two hashes in constant time. A secure migration should also rehash existing plaintext passwords on the next successful login or, preferably, require password reset and then replace plaintext values with hashes.
 
 ## Known Limitations
 
-- Passwords are currently stored in plain text in the local SQLite database; hashing them is the next planned improvement.
-
-## Future Improvements
-
-- Add stronger password validation and secure storage
-- Add habit due dates or recurring schedules
-- Add filtering by category or completion state
-- Improve UI styling with Material components
-- Add a profile screen with account details
+- Passwords are currently stored in plain text in the local SQLite database.
+- Authentication is local to the app and is not backed by a server or remote account system.
+- The completion counter and streak value are stored fields; the implementation does not maintain dated streak history.
+- The streak counter is not a calendar-validated streak: checking an unchecked habit increments it, while unchecking or using **New Day** does not provide a complete consecutive-days calculation.
+- The weekly day control is a visual selector; selecting another day does not change or load a separate date's habits.
